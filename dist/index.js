@@ -4,23 +4,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const body_parser_1 = __importDefault(require("body-parser"));
 const app = (0, express_1.default)();
-const port = 8000;
+const port = 3000;
+app.use(body_parser_1.default.json());
+app.listen(port, () => {
+    console.log("Server running on port: " + port);
+});
 let vehicles = [];
 app.get('/hello', (req, res) => {
     let text = "Hello world";
     res.send(text);
 });
-app.listen(port, () => {
-    console.log("Server running on port: " + port);
-});
 app.post('/vehicle/add', (req, res) => {
-    const newVehicle = req.body.vehicle;
     vehicles.push({
-        "model": newVehicle.model,
-        "color": newVehicle.color,
-        "year": newVehicle.year,
-        "power": newVehicle.power,
+        "model": req.body.model,
+        "color": req.body.color,
+        "year": req.body.year,
+        "power": req.body.power,
     });
     res.status(201);
     res.send("Vehicle added");

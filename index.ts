@@ -1,9 +1,17 @@
 
 import express, { Express, Request, Response } from "express";
+import bodyParser from "body-parser";
 const app: Express = express();
 const port: number = 3000;
 
-let vehicles: {model: string, color: string, year: number, power: number}[] = [];
+app.use(bodyParser.json());
+
+app.listen(port, () =>
+{
+    console.log("Server running on port: " + port);
+});
+
+let vehicles: any[] = [];
 
 app.get('/hello', (req: Request, res: Response) => 
 {
@@ -11,27 +19,21 @@ app.get('/hello', (req: Request, res: Response) =>
     res.send(text);
 });
 
-app.listen(port, () =>
+app.post('/vehicle/add', (req: Request, res: Response) =>
 {
-    console.log("Server running on port: " + port);
-});
-
-app.post('/vehicle/add', (req, res) =>
-{
-    const newVehicle = req.body.vehicle;
     vehicles.push(
         {
-            "model": newVehicle.model,
-            "color": newVehicle.color,
-            "year": newVehicle.year,
-            "power": newVehicle.power,
+            "model": req.body.model,
+            "color": req.body.color,
+            "year": req.body.year,
+            "power": req.body.power,
         }
     );
     res.status(201);
     res.send("Vehicle added");
 });
 
-app.get('/vehicle/search/:model', (req, res) =>
+app.get('/vehicle/search/:model', (req: Request, res: Response) =>
 {
     const model: string = req.params.model;
     let found: boolean = false;
