@@ -1,7 +1,7 @@
 
 import express, { Express, Request, Response } from "express";
 const app: Express = express();
-const port: number = 8000;
+const port: number = 3000;
 
 let vehicles: {model: string, color: string, year: number, power: number}[] = [];
 
