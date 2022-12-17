@@ -17,12 +17,44 @@ app.get('/hello', (req, res) => {
     res.send(text);
 });
 app.post('/vehicle/add', (req, res) => {
-    vehicles.push({
-        "model": req.body.model,
-        "color": req.body.color,
-        "year": req.body.year,
-        "power": req.body.power,
-    });
+    if (req.body.bodyType === undefined) {
+        if (req.body.draft === undefined) {
+            vehicles.push({
+                "model": req.body.model,
+                "color": req.body.color,
+                "year": req.body.year,
+                "power": req.body.power,
+                "wingspan": req.body.wingspan
+            });
+        }
+        else if (req.body.wingspan === undefined) {
+            vehicles.push({
+                "model": req.body.model,
+                "color": req.body.color,
+                "year": req.body.year,
+                "power": req.body.power,
+                "draft": req.body.draft
+            });
+        }
+        else {
+            vehicles.push({
+                "model": req.body.model,
+                "color": req.body.color,
+                "year": req.body.year,
+                "power": req.body.power,
+            });
+        }
+    }
+    else {
+        vehicles.push({
+            "model": req.body.model,
+            "color": req.body.color,
+            "year": req.body.year,
+            "power": req.body.power,
+            "bodyType": req.body.bodyType,
+            "wheelCount": req.body.wheelCount
+        });
+    }
     res.status(201);
     res.send("Vehicle added");
 });
@@ -30,7 +62,7 @@ app.get('/vehicle/search/:model', (req, res) => {
     const model = req.params.model;
     let found = false;
     vehicles.forEach((item) => {
-        if (item.model === model) {
+        if (item.model === model && !found) {
             found = true;
             res.send(item);
         }
